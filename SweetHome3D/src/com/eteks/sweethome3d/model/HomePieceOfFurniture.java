@@ -51,7 +51,7 @@ public class HomePieceOfFurniture extends HomeObject implements PieceOfFurniture
    * to a piece of furniture will be notified under a property name equal to the string value of one these properties.
    */
   public enum Property {NAME, NAME_VISIBLE, NAME_X_OFFSET, NAME_Y_OFFSET, NAME_STYLE, NAME_ANGLE,
-      DESCRIPTION, PRICE, WIDTH, DEPTH, HEIGHT, COLOR, TEXTURE, MODEL_MATERIALS, SHININESS, VISIBLE, X, Y, ELEVATION, ANGLE, MODEL_MIRRORED, MOVABLE, LEVEL};
+      DESCRIPTION, PRICE, WIDTH, DEPTH, HEIGHT, VOLUME, COLOR, TEXTURE, MODEL_MATERIALS, SHININESS, VISIBLE, X, Y, ELEVATION, ANGLE, MODEL_MIRRORED, MOVABLE, LEVEL};
   
   /** 
    * The properties on which home furniture may be sorted.  
@@ -537,9 +537,13 @@ public class HomePieceOfFurniture extends HomeObject implements PieceOfFurniture
     if (isResizable()) {
       if (depth != this.depth) {
         float oldDepth = this.depth;
+        float oldVolume = this.volume;
+        float volume = this.height*this.width*depth;
         this.depth = depth;
+        this.volume = volume;
         this.shapeCache = null;
         this.propertyChangeSupport.firePropertyChange(Property.DEPTH.name(), oldDepth, depth);
+        this.propertyChangeSupport.firePropertyChange(Property.VOLUME.name(), oldVolume, volume);
       }
     } else {
       throw new IllegalStateException("Piece isn't resizable");
@@ -562,8 +566,12 @@ public class HomePieceOfFurniture extends HomeObject implements PieceOfFurniture
     if (isResizable()) {
       if (height != this.height) {
         float oldHeight = this.height;
+        float oldVolume = this.volume;
+        float volume = height*this.width*this.depth;
         this.height = height;
+        this.volume = volume;
         this.propertyChangeSupport.firePropertyChange(Property.HEIGHT.name(), oldHeight, height);
+        this.propertyChangeSupport.firePropertyChange(Property.VOLUME.name(), oldVolume, volume);
       }
     } else {
       throw new IllegalStateException("Piece isn't resizable");
@@ -586,9 +594,13 @@ public class HomePieceOfFurniture extends HomeObject implements PieceOfFurniture
     if (isResizable()) {
       if (width != this.width) {
         float oldWidth = this.width;
+        float oldVolume = this.volume;
+        float volume = this.height*width*this.depth;
         this.width = width;
+        this.volume = volume;
         this.shapeCache = null;
         this.propertyChangeSupport.firePropertyChange(Property.WIDTH.name(), oldWidth, width);
+        this.propertyChangeSupport.firePropertyChange(Property.VOLUME.name(), oldVolume, volume);
       }
     } else {
       throw new IllegalStateException("Piece isn't resizable");
